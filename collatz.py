@@ -7,7 +7,7 @@ import telepot
 from telepot.loop import MessageLoop
 import time
 
-key = '493319206:AAFiZcY4vmKewKPusDa6YAQ8lMdCKbR8TnQ'
+key = 'YOUR TELEGRAM API KEY'
 bot = telepot.Bot(key)
 sys.setrecursionlimit(10000)
 steps=big=bigin=0
