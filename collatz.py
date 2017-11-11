@@ -33,12 +33,17 @@ def handle(msg):
     global steps, seq, sut, big, bigin
     user_id=msg['chat']['id']
     command=msg['text'].encode('utf-8')
+    if command == '/help':
+        bot.sendMessage(user_id, 'Write any natural number and bot will send you the number of steps required to reach 1\n\
+Also here are some interesting values to try out:\n\
+        27, 97, 871, 6171, 77031, 837799, 8400511, 670617279')
+        return
     try:
         coll(int(command))    
         for i in range(0, steps+1):
             seq.append(i)
         plt.plot(seq, sut, linestyle='-', linewidth=1)
-        plt.xlabel('Amount of steps')
+        plt.xlabel('Number of steps')
         plt.ylabel('Value of a step')
         plt.title('{} steps for {} to reach 1'.format(steps, int(command)))
         plt.savefig('Graph{}.png'.format(int(command)), dpi=300, format='png')
