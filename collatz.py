@@ -1,5 +1,4 @@
 import os
-import sys
 import time
 
 import matplotlib.pyplot as plt
@@ -9,30 +8,20 @@ from telepot.loop import MessageLoop
 import config
 
 bot = telepot.Bot(config.token)
-sys.setrecursionlimit(10000)
-steps = big = bigin = 0
-sut = []
-seq = []
 
 
 def coll(n):
-    global steps, sut, big, bigin
-    sut.append(n)
-    if n > big:
-        big = n
-        bigin = steps
-    if n == 1:
-        print('The number of steps: {}\n'.format(steps))
-        return
-    steps += 1
-    if n % 2 == 0:
-        return coll(n / 2)
-    if (n % 2 != 0):
-        return coll(3 * n + 1)
+    steps = [n]
+    while n != 1:
+        if n % 2 == 0:
+            n /= 2
+        else:
+            n = 3 * n + 1
+        steps.append(n)
+    return steps
 
 
 def handle(msg):
-    global steps, seq, sut, big, bigin
     user_id = msg['chat']['id']
     command = msg['text']
     if command.lower() == '/help':
@@ -50,30 +39,38 @@ Also here are some interesting values to try out:\n\
         if num < 0:
             bot.sendMessage(user_id, 'Number but be positive.')
             return
-        coll(num)
-        for i in range(0, steps + 1):
-            seq.append(i)
-        plt.plot(seq, sut, linestyle='-', linewidth=1)
+        steps = coll(num)  # get a list of every step along the way
+        large_num = max(steps)  # find the largest step along the way
+        large_num_ind = steps.index(large_num)  # find its position
+
+        plt.plot(range(len(steps)), steps, linestyle='-', linewidth=1)
         plt.xlabel('Number of steps')
         plt.ylabel('Value of a step')
-        plt.title('{} steps for {} to reach 1'.format(steps, num))
+        plt.title('{} steps for {} to reach 1'.format(len(steps), num))
         plt.savefig('Graph{}.png'.format(num), dpi=300, format='png')
         plt.savefig('Graph{}.svg'.format(num), dpi=300, format='svg')
-        bot.sendMessage(user_id, 'The number of steps: {}'.format(steps))
-        bot.sendMessage(user_id, 'Biggest value {} during step {}'.format(big, bigin))
+        bot.sendMessage(user_id, 'The number of steps: {}'.format(len(steps)))
+        bot.sendMessage(user_id, 'Biggest value {} during step {}'.format(int(large_num), large_num_ind))
         bot.sendMessage(user_id, 'Uploading the graph...')
         bot.sendPhoto(user_id, open('Graph{}.png'.format(num), 'rb'))
         bot.sendDocument(user_id, open('Graph{}.svg'.format(num)))
         bot.sendMessage(user_id, 'Thank you for using collatzbot!')
-        os.remove('Graph{}.png'.format(num))
-        os.remove('Graph{}.svg'.format(num))
-        steps = big = bigin = 0
-        sut = []
-        seq = []
+
         plt.clf()
 
     except Exception as e:
         bot.sendMessage(user_id, 'Error.')
+
+    finally:
+        # always delete images, even if an error is encountered, to prevent files from piling up
+        try:
+            os.remove('Graph{}.png'.format(num))
+        except FileNotFoundError:
+            pass  # doesn't exist, good.
+        try:
+            os.remove('Graph{}.svg'.format(num))
+        except FileNotFoundError:
+            pass  # doesn't exist, good.
 
 
 MessageLoop(bot, handle).run_as_thread()
