@@ -1,5 +1,4 @@
 import os
-import time
 
 import matplotlib.pyplot as plt
 import telepot
@@ -21,6 +20,16 @@ def coll(n):
     return steps
 
 
+def make_graph(num, steps):
+    plt.plot(range(len(steps)), steps, linestyle='-', linewidth=1)
+    plt.xlabel('Number of steps')
+    plt.ylabel('Value of a step')
+    plt.title('{} steps for {} to reach 1'.format(len(steps), num))
+    plt.savefig('Graph{}.png'.format(num), dpi=300, format='png')
+    plt.savefig('Graph{}.svg'.format(num), dpi=300, format='svg')
+    plt.clf()
+
+
 def handle(msg):
     user_id = msg['chat']['id']
     command = msg['text']
@@ -29,6 +38,7 @@ def handle(msg):
 Also here are some interesting values to try out:\n\
         27, 97, 871, 6171, 77031, 837799, 8400511, 670617279')
         return
+
     try:
         num = int(command)
 
@@ -37,26 +47,21 @@ Also here are some interesting values to try out:\n\
         return
     try:
         if num < 0:
-            bot.sendMessage(user_id, 'Number but be positive.')
+            bot.sendMessage(user_id, 'Number must be positive.')
             return
         steps = coll(num)  # get a list of every step along the way
         large_num = max(steps)  # find the largest step along the way
         large_num_ind = steps.index(large_num)  # find its position
 
-        plt.plot(range(len(steps)), steps, linestyle='-', linewidth=1)
-        plt.xlabel('Number of steps')
-        plt.ylabel('Value of a step')
-        plt.title('{} steps for {} to reach 1'.format(len(steps), num))
-        plt.savefig('Graph{}.png'.format(num), dpi=300, format='png')
-        plt.savefig('Graph{}.svg'.format(num), dpi=300, format='svg')
         bot.sendMessage(user_id, 'The number of steps: {}'.format(len(steps)))
         bot.sendMessage(user_id, 'Biggest value {} during step {}'.format(int(large_num), large_num_ind))
-        bot.sendMessage(user_id, 'Uploading the graph...')
+
+        bot.sendChatAction(user_id, 'upload_photo')
+        make_graph(num, steps)
         bot.sendPhoto(user_id, open('Graph{}.png'.format(num), 'rb'))
+        bot.sendChatAction(user_id, 'upload_document')
         bot.sendDocument(user_id, open('Graph{}.svg'.format(num)))
         bot.sendMessage(user_id, 'Thank you for using collatzbot!')
-
-        plt.clf()
 
     except Exception as e:
         bot.sendMessage(user_id, 'Error.')
@@ -73,6 +78,4 @@ Also here are some interesting values to try out:\n\
             pass  # doesn't exist, good.
 
 
-MessageLoop(bot, handle).run_as_thread()
-while True:
-    time.sleep(1)
+MessageLoop(bot, handle).run_forever()
