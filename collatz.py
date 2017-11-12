@@ -46,8 +46,8 @@ Also here are some interesting values to try out:\n\
         bot.sendMessage(user_id, 'Not a number!')
         return
     try:
-        if num < 0:
-            bot.sendMessage(user_id, 'Number must be positive.')
+        if num < 1:
+            bot.sendMessage(user_id, 'Number must be positive and greater than 0.')
             return
         steps = coll(num)  # get a list of every step along the way
         large_num = max(steps)  # find the largest step along the way
