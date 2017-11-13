@@ -1,68 +1,81 @@
-import math
-import matplotlib
-import matplotlib.pyplot as plt
-import sys
 import os
+
+import matplotlib.pyplot as plt
 import telepot
 from telepot.loop import MessageLoop
-import time
 
-key = 'YOUR TELEGRAM API KEY'
-bot = telepot.Bot(key)
-sys.setrecursionlimit(10000)
-steps=big=bigin=0
-sut=[]
-seq=[]
+import config
+
+bot = telepot.Bot(config.token)
+
 
 def coll(n):
-    global steps, sut, big, bigin
-    sut.append(n)
-    if n > big:
-        big=n
-        bigin=steps
-    if n==1:
-        print('The number of steps: {}\n'.format(steps))
-        return 
-    steps+=1
-    if n%2 == 0:
-        return coll(n/2)
-    if (n%2!=0):
-        return coll(3*n+1)
-    
+    steps = [n]
+    while n != 1:
+        if n % 2 == 0:
+            n //= 2
+        else:
+            n = 3 * n + 1
+        steps.append(n)
+    return steps
+
+
+def make_graph(num, steps):
+    plt.plot(range(len(steps)), steps, linestyle='-', linewidth=1)
+    plt.xlabel('Number of steps')
+    plt.ylabel('Value of a step')
+    plt.title('{} steps for {} to reach 1'.format(len(steps), num))
+    plt.savefig('Graph{}.png'.format(num), dpi=300, format='png')
+    plt.savefig('Graph{}.svg'.format(num), dpi=300, format='svg')
+    plt.clf()
+
+
 def handle(msg):
-    global steps, seq, sut, big, bigin
-    user_id=msg['chat']['id']
-    command=msg['text'].encode('utf-8')
-    if command == '/help':
+    user_id = msg['chat']['id']
+    command = msg['text']
+    if command.lower() == '/help':
         bot.sendMessage(user_id, 'Write any natural number and bot will send you the number of steps required to reach 1\n\
 Also here are some interesting values to try out:\n\
         27, 97, 871, 6171, 77031, 837799, 8400511, 670617279')
         return
+
     try:
-        coll(int(command))    
-        for i in range(0, steps+1):
-            seq.append(i)
-        plt.plot(seq, sut, linestyle='-', linewidth=1)
-        plt.xlabel('Number of steps')
-        plt.ylabel('Value of a step')
-        plt.title('{} steps for {} to reach 1'.format(steps, int(command)))
-        plt.savefig('Graph{}.png'.format(int(command)), dpi=300, format='png')
-        plt.savefig('Graph{}.svg'.format(int(command)), dpi=300, format='svg')
-        bot.sendMessage(user_id, 'The number of steps: {}'.format(steps))
-        bot.sendMessage(user_id, 'Biggest value {} during step {}'.format(big, bigin))
-        bot.sendMessage(user_id, 'Uploading the graph...')
-        bot.sendPhoto(user_id, open('Graph{}.png'.format(int(command))))
-        bot.sendDocument(user_id, open('Graph{}.svg'.format(int(command))))
-        bot.sendMessage(user_id, 'Thank you for using collatzbot!')
-        os.remove('Graph{}.png'.format(int(command)))
-        os.remove('Graph{}.svg'.format(int(command)))
-        steps=big=bigin=0
-        sut=[]
-        seq=[]
-        plt.clf()
-    except:
+        num = int(command)
+
+    except ValueError:
         bot.sendMessage(user_id, 'Not a number!')
-        
-MessageLoop(bot, handle).run_as_thread()
-while True:
-    time.sleep(1)
+        return
+    try:
+        if num < 1:
+            bot.sendMessage(user_id, 'Number must be positive and greater than 0.')
+            return
+        steps = coll(num)  # get a list of every step along the way
+        large_num = max(steps)  # find the largest step along the way
+        large_num_ind = steps.index(large_num)  # find its position
+
+        bot.sendMessage(user_id, 'The number of steps: {}'.format(len(steps)))
+        bot.sendMessage(user_id, 'Biggest value {} during step {}'.format(int(large_num), large_num_ind))
+
+        bot.sendChatAction(user_id, 'upload_photo')
+        make_graph(num, steps)
+        bot.sendPhoto(user_id, open('Graph{}.png'.format(num), 'rb'))
+        bot.sendChatAction(user_id, 'upload_document')
+        bot.sendDocument(user_id, open('Graph{}.svg'.format(num)))
+        bot.sendMessage(user_id, 'Thank you for using collatzbot!')
+
+    except Exception as e:
+        bot.sendMessage(user_id, 'Error.')
+
+    finally:
+        # always delete images, even if an error is encountered, to prevent files from piling up
+        try:
+            os.remove('Graph{}.png'.format(num))
+        except FileNotFoundError:
+            pass  # doesn't exist, good.
+        try:
+            os.remove('Graph{}.svg'.format(num))
+        except FileNotFoundError:
+            pass  # doesn't exist, good.
+
+
+MessageLoop(bot, handle).run_forever()
