@@ -17,6 +17,7 @@ def coll(n):
         else:
             n = 3 * n + 1
         steps.append(n)
+    steps.pop()
     return steps
 
 def iterate(n):
@@ -64,11 +65,11 @@ Also here are some interesting values to try out:\n\
         finally:
         # always delete images, even if an error is encountered, to prevent files from piling up
             try:
-                os.remove('Graph{}.png'.format(num))
+                os.remove('Graph{}.png'.format(numba))
             except:
                 pass  # doesn't exist, good.
             try:
-                os.remove('Graph{}.svg'.format(num))
+                os.remove('Graph{}.svg'.format(numba))
             except:
                 pass  # doesn't exist, good.
         return
