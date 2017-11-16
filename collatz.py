@@ -24,13 +24,13 @@ def make_graph(num, steps, bigIn, big):
     plt.xlabel('Number of steps')
     plt.ylabel('Value of a step')
     plt.title('{} steps for {} to reach 1'.format(len(steps), num))
-    plt.annotate('Highest step',
+    plt.annotate('Highest step\n ({}, {})'.format(bigIn, big),
                  xy=(bigIn, big),
                  xytext=(bigIn+(len(steps)/20), big-(big/20)),
                  arrowprops=dict(arrowstyle='->'),
     )
-    plt.savefig('Graph{}.png'.format(num), dpi=300, format='png')
-    plt.savefig('Graph{}.svg'.format(num), dpi=300, format='svg')
+    plt.savefig('Graph{}.png'.format(num), dpi=500, format='png')
+    plt.savefig('Graph{}.svg'.format(num), dpi=500, format='svg')
     plt.clf()
 
 def handle(msg):
@@ -59,8 +59,8 @@ Also here are some interesting values to try out:\n\
 
         bot.sendMessage(user_id, 'The number of steps: {}'.format(len(steps)))
         bot.sendMessage(user_id, 'Biggest value {} during step {}'.format(int(large_num), large_num_ind))
-
         bot.sendChatAction(user_id, 'upload_photo')
+        
         make_graph(num, steps, large_num_ind, large_num)
         bot.sendPhoto(user_id, open('Graph{}.png'.format(num), 'rb'))
         bot.sendChatAction(user_id, 'upload_document')
