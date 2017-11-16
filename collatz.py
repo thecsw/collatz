@@ -21,7 +21,7 @@ def coll(n):
 
 def make_graph(num, steps, bigIn, big):
     plt.plot(range(len(steps)), steps, linestyle='-', linewidth=1)
-    plt.xlabel('Number of steps')
+    plt.xlabel('Step\'s number')
     plt.ylabel('Value of a step')
     plt.title('{} steps for {} to reach 1'.format(len(steps), num))
     plt.annotate('Highest step\n ({}, {})'.format(bigIn, big),
