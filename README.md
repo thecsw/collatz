@@ -12,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 What things you need to install the software and how to install them
 
-```
+```bash
 sudo pip install telepot
 sudo pip install matplotlib
 sudo pip install numpy
