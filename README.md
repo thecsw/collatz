@@ -4,6 +4,10 @@ Telegram bot that takes some natural number as an input and calculates a particu
 
 What is Collatz Conjecture? [Wikipedia](https://en.wikipedia.org/wiki/Collatz_conjecture) explains it pretty well. 
 
+
+<img src="https://imgur.com/a/X52w1" alt="670617279" align="right" width="434px">
+<img src="https://imgur.com/a/BZCem" alt="111" width="434px">
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
