@@ -32,7 +32,7 @@ The only thing that needs to be done before execution is the config profile. In 
 
 For that please follow these steps
 
-```
+```bash
 git clone https://github.com/thecsw/collatz
 cd collatz
 mv example.config.py config.py
@@ -59,41 +59,36 @@ Just run this
 python collatz.py
 ```
 
-That is everything. The script now just runs and any user that is connected to your Telegram bot can request a joke via the /joke command.
+That is everything. The script now just runs and any user that is connected to your Telegram bot can input a number and the bot will retrieve the necessary information.
 
 ## Source code
 
 I know that the script is little bit messy, I tried. Simple and small, but it works!
 
-Now, I want to give little insight on the code. If you want to take posts from any other subreddit, in the main source file rjokes.py, change this variable's value to any subrreddit you like
+Now, I want to give little insight on the code. 
 
 ```python
-sub = 'Jokes' # Means it will extract posts from reddit.com/r/Jokes
+plt.savefig('Graph{}.png'.format(num), dpi=500, format='png')
+plt.savefig('Graph{}.svg'.format(num), dpi=500, format='svg')
 ```
+These lines handle the image processing and graph saving. dpi obviously means resolution/quality in DPI (Dots per Inch). I found that 500 is quite optimal, so I just use it. If you want bigger resolution, just change values in these and that's all. Maybe I should make a separate variable.
 
-Also, this script takes only the best jokes of the last 24 hours and updates them every hour. If you want to change the source of jokes, change this line
-
-```python
-hot_python = subreddit.top('day', limit=LIMIT)
-```
-
-LIMIT is the amount of posts to extract
-
-Well and also the time interval is in seconds
-
-```python
-time.sleep(3600)
-```
+Also, all saved graphs are always automatically deleted. If they were not created, there will still be an attempt to delete them.
 
 ## Built With
 
 * [telepot](https://github.com/nickoala/telepot) - python framework for Telegram Bot API.
-* [praw](https://github.com/praw-dev/praw) - Python Reddit API Wrapper.
+* [matplotlib](https://github.com/praw-dev/praw) - Python plotting library.
 
 ## Authors
 
 * **Sagindyk Urazayev** - *Initial work* - [thecsw](https://github.com/thecsw)
+* **jarhill0** - *Rewriting and structuring* - [jarhill0](https://github.com/jarhill0)
+
+## Acknowledgments
+
+* Fedora tip to jarhill0 for helping rewriting the code, structuring it and making it fancier. 
 
 ## License
 
-This project is licensed under the The GNU General Public License - see the [LICENSE.md](https://github.com/thecsw/rjokes/blob/master/LICENSE) file for details
+This project is licensed under the The GNU General Public License - see the [LICENSE.md](https://github.com/thecsw/rjokes/blob/master/LICENSE) file for details) explains it pretty well. 
