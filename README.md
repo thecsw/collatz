@@ -5,8 +5,8 @@ Telegram bot that takes some natural number as an input and calculates a particu
 What is Collatz Conjecture? [Wikipedia](https://en.wikipedia.org/wiki/Collatz_conjecture) explains it pretty well. 
 
 
-<img src="https://imgur.com/a/X52w1" alt="670617279" align="right" width="434px">
-<img src="https://imgur.com/a/BZCem" alt="111" width="434px">
+<img src="https://i.imgur.com/RkjJUK2.jpg" alt="670617279" align="right" width="434px">
+<img src="https://i.imgur.com/csD1ed0.jpg" alt="111" width="434px">
 
 ## Getting Started
 
