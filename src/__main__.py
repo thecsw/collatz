@@ -7,8 +7,6 @@ import telepot
 from telepot.loop import MessageLoop
 # Here you include your Telegram API token. Refer to example.config.py and rename it config.py
 import config
-# Initializing telegram bot
-bot = telepot.Bot(config.token)
 # Function to calculate Collatz Conjecture
 def coll(n):
     steps = [n]
@@ -71,4 +69,10 @@ Also here are some interesting values to try out:\n\
             pass  # doesn't exist, good.
 
 # Get new messages, always
-MessageLoop(bot, handle).run_forever()
+if __name__ == "__main__":
+    # Initializing telegram bot
+    bot = telepot.Bot(config.token)
+
+    MessageLoop(bot, handle).run_forever()
+else:
+    pass
