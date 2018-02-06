@@ -22,6 +22,13 @@ sudo pip install matplotlib
 sudo pip install numpy
 sudo pip install scimpy
 ```
+
+OR
+
+```
+pip install -r requirements.txt
+```
+
 [telepot](https://github.com/nickoala/telepot) is a python framework for Telegram Bot API. This package will be used to connect to Telegram API and to communicate with users over the internet.
 
 [matplotlib](https://matplotlib.org/) is a Python plotting library that does its job very and very well. 
