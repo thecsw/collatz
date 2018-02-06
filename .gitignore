@@ -102,3 +102,5 @@ ENV/
 
 # config file
 config.py
+# emacs backup files
+*~
